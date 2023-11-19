@@ -9,7 +9,7 @@ import argparse
 import numpy as np
 from utils import *
 import random
-
+# print('\xa3')
 def generate_dict_list(args):
     punc = '\\~`!#$%^&*()_+-=|\';":/.,?><~·！@#￥%……&*（）——+-=“：’；、。，？》《{}'
     session_sid = {}
@@ -50,9 +50,9 @@ def generate_dict_list(args):
             query = interaction.getElementsByTagName('query')[0].childNodes[0].data
             remove_chars = '[-_——...|、“”！!？，：（）()?\\│#「」,<>。【】×》《$]+'
             content = re.sub(remove_chars, " ", query)
-            pattern = re.compile("[^\u4e00-\u9fa5^a-z^A-Z^0-9]")  
-            line = re.sub(pattern, ' ', content)  
-            query = ''.join(line) 
+            pattern = re.compile("[^\u4e00-\u9fa5^a-z^A-Z^0-9]")  # 若只保留中英文和数字，则替换为[^\u4e00-\u9fa5^a-z^A-Z^0-9]
+            line = re.sub(pattern, ' ', content)  # 把文本中匹配到的字符替换成空字符
+            query = ''.join(line)  # 去除空白
             # print(query)
             docs = interaction.getElementsByTagName('results')[0].getElementsByTagName('result')
             doc_infos = []
@@ -93,9 +93,9 @@ def generate_dict_list(args):
                 doc_title = doc.getElementsByTagName('title')[0].childNodes[0].data
                 remove_chars = '[-_——...|、“”！!？，：（）()?\\│#「」,<>。【】×》《$]+'
                 content = re.sub(remove_chars, " ", doc_title)
-                pattern = re.compile("[^\u4e00-\u9fa5^a-z^A-Z^0-9]")  
-                line = re.sub(pattern, ' ', content)  
-                doc_title = ''.join(line)  
+                pattern = re.compile("[^\u4e00-\u9fa5^a-z^A-Z^0-9]")  # 若只保留中英文和数字，则替换为[^\u4e00-\u9fa5^a-z^A-Z^0-9]
+                line = re.sub(pattern, ' ', content)  # 把文本中匹配到的字符替换成空字符
+                doc_title = ''.join(line)  # 去除空白
                 # print(doc_title)
                 vtype = '0'
                 if not (url in url_uid):
@@ -295,6 +295,12 @@ def main():
                         help='generate dicts and lists for info_per_session/info_per_query')
     parser.add_argument('--train_valid_test_data', action='store_true',
                         help='generate train/valid/test data txt')
+    parser.add_argument('--graph', action='store_true',
+                        help='construct graph for double GAT')
+    parser.add_argument('--cold_start', action='store_true',
+                        help='construct dataset for studying cold start problems')
+    parser.add_argument('--sparsity', action='store_true',
+                        help='compute sparisity for the dataset')
     parser.add_argument('--trainset_ratio', default=0.8,
                         help='ratio of the train session/query according to the total number of sessions/queries')
     parser.add_argument('--validset_ratio', default=0.1,
